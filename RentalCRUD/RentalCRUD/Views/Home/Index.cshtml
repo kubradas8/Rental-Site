@@ -1,0 +1,353 @@
+﻿@model RentalCRUD.Models.AdvertViewModel
+
+@{
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<div class="container" style="margin-top:3%">
+    <h1>Kiralama Sitesi</h1>
+    <a href="#" class="btn btn-primary btn-lg" style="margin-top:3%;" onclick="AddNewAdvert(0)">Yeni İlan Ekle</a> <br /><br />
+
+    <div style="display:flex;margin-bottom:30px;">
+        <div class="input-group">
+            <input type="text" id="txtsearch" class="form-control" placeholder="Ara (Ev, Araba, İşyeri)">
+        </div>
+        <div class="input-group" style="margin-left:10px;">
+            <input type="text" id="txtCountrySearch" class="form-control" placeholder="İllerde Arayın">
+        </div>
+        <div class="input-group" style="margin-left:10px;">
+            <input type="text" id="txtStateSearch" class="form-control" placeholder="İlçelerde Arayın">
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>İlan Adı</th>
+                <th>İlan Sahibi</th>
+                <th>Açıklama</th>
+                <th>Fiyat</th>
+                <th>Kategori</th>
+                <th>İl</th>
+                <th>İlçe</th>
+                <th>İlan Tarihi</th>
+            </tr>
+        </thead>
+        <tbody id="SetAdvertList">
+            <tr id="LoadingStatus" style="color:red"></tr>
+        </tbody>
+    </table>
+
+    @*İlan Kaydı Ekle/Güncelle*@
+
+    <div class="modal fade" id="MyModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h3 id="ModalTitle"></h3>
+                </div>
+                <div class="modal-body">
+                    <form id="form">
+                        <fieldset id="SubmitForm">
+                            @Html.HiddenFor(m => m.Id, new { @id = "Id" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Title, new { @id = "Title", @class = "form-control", @placeholder = "İlan Adı" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.AdvertOwner, new { @id = "AdvertOwner", @class = "form-control", @placeholder = "İlan Sahibi" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Description, new { @id = "Description", @class = "form-control", @placeholder = "Açıklama" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Price, new { @id = "Price", @class = "form-control", @placeholder = "Fiyat" })
+                            </div>
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.CategoryId, ViewBag.ListOfCategory as SelectList, "-Kategori Seçiniz-", new { @id = "CategoryId", @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.Country_Id, ViewBag.ListOfCountry as SelectList, "-İl Seçiniz-", new { @id = "Country_Id", @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.DropDownListFor(m => m.State_Id, new SelectList(" "), "-İlçe Seçiniz-", new { @id = "State_Id", @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Date, "*İlan tarihi için bugünün tarihi otomatik olarak girilecektir.")
+                            </div>
+                            <br />
+                            <h4>Kiralık Ev Detaylar</h4>
+                            <hr />
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.RoomCount, new { @id = "RoomCount", @class = "form-control", @placeholder = "Oda Sayısı" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Age, new { @id = "Age", @class = "form-control", @placeholder = "Bina Yaşı" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Floor, new { @id = "Floor", @class = "form-control", @placeholder = "Kat" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Balcony, new { @id = "Balcony", @class = "form-control", @placeholder = "Balkon Sayısı" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.HeatingSystem, new { @id = "HeatingSystem", @class = "form-control", @placeholder = "Isıtma Türü" })
+                            </div>
+                            <br />
+                            <h4>Kiralık İşyeri Detaylar</h4>
+                            <hr />
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Type, new { @id = "Type", @class = "form-control", @placeholder = "İşyeri Tipi" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Status, new { @id = "Status", @class = "form-control", @placeholder = "Durumu" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.WorkAge, new { @id = "WorkAge", @class = "form-control", @placeholder = "Bina Yaşı" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.WorkRoom, new { @id = "WorkRoom", @class = "form-control", @placeholder = "Bölüm/Oda Sayısı" })
+                            </div>
+                            <br />
+                            <h4>Kiralık Araba Detaylar</h4>
+                            <hr />
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Brand, new { @id = "Brand", @class = "form-control", @placeholder = "Marka" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.CarModel, new { @id = "CarModel", @class = "form-control", @placeholder = "Model" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.ModelYear, new { @id = "ModelYear", @class = "form-control", @placeholder = "Model Yılı" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Gear, new { @id = "Gear", @class = "form-control", @placeholder = "Vites" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.FuelType, new { @id = "FuelType", @class = "form-control", @placeholder = "Yakıt Türü" })
+                            </div>
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.Color, new { @id = "Color", @class = "form-control", @placeholder = "Renk" })
+                            </div>
+
+                            <div class="form-group">
+                                <a href="#" class="btn btn-block btn-primary" id="SaveAdvertRecord">Kaydet</a>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Silme Onay Popup*@
+
+    <div class="modal fade" id="DeleteConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h3>İlan Kaydını Sil</h3>
+                </div>
+                <div class="modal-body">
+                    <h4>Kaydı silmek istediğinizden emin misiniz?</h4>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary" data-dismiss="modal" id="r">İptal</a>
+                    <a href="#" class="btn btn-danger" onclick="ConfirmDelete()">Kaydı Sil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Arama Input*@
+<script>
+    $("#txtsearch").on("keyup", function () {
+        var txtenter = $(this).val();
+        $("table tr").each(function (results) {
+            if (results !== 0) {
+                var id = $(this).find("td:nth-child(5)").text();
+                if (id.indexOf(txtenter) !== 0 && id.toLowerCase().indexOf(txtenter.toLowerCase()) < 0) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            }
+        })
+    });
+
+    $("#txtCountrySearch").on("keyup", function () {
+        var txtenter = $(this).val();
+        $("table tr").each(function (results) {
+            if (results !== 0) {
+                var id = $(this).find("td:nth-child(6)").text();
+                if (id.indexOf(txtenter) !== 0 && id.toLowerCase().indexOf(txtenter.toLowerCase()) < 0) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            }
+        })
+    });
+
+    $("#txtStateSearch").on("keyup", function () {
+        var txtenter = $(this).val();
+        $("table tr").each(function (results) {
+            if (results !== 0) {
+                var id = $(this).find("td:nth-child(7)").text();
+                if (id.indexOf(txtenter) !== 0 && id.toLowerCase().indexOf(txtenter.toLowerCase()) < 0) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            }
+        })
+    });
+</script>
+
+@*İl İlçe Dropdownlist*@
+<script>
+    $(document).ready(function () {
+        $("#Country_Id").change(function () {
+            $.get("/Home/GetStateList", { Country_Id: $("#Country_Id").val() }, function (data) {
+                $("#State_Id").empty();
+                $.each(data, function (index, row) {
+                    $("#State_Id").append("<option value='" + row.Id + "'>" + row.StateName + "</option>")
+                });
+            });
+        })
+    });
+</script>
+
+
+<script>
+    $("#LoadingStatus").html("Yükleniyor....");
+    $.get("/Home/GetAdvertList", null, DataBind);
+    function DataBind(AdvertList) {
+        var SetData = $("#SetAdvertList");
+        for (var i = 0; i < AdvertList.length; i++) {
+            var Data = "<tr class='row_" + AdvertList[i].Id + "'>" +
+                "<td>" + AdvertList[i].Title + "</td>" +
+                "<td>" + AdvertList[i].AdvertOwner + "</td>" +
+                "<td>" + AdvertList[i].Description + "</td>" +
+                "<td>" + AdvertList[i].Price + " TL</td>" +
+                "<td>" + AdvertList[i].CategoryName + "</td>" +
+                "<td>" + AdvertList[i].CountryName + "</td>" +
+                "<td>" + AdvertList[i].StateName + "</td>" +
+                "<td>" + AdvertList[i].Date + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-warning btn-sm' onclick='EditAdvertRecord(" + AdvertList[i].Id + ")' >Güncelle</a>" + "</td>" +
+                "<td>" + "<a href='#' class='btn btn-danger btn-sm' onclick='DeleteAdvertRecord(" + AdvertList[i].Id + ")'>İlanı Sil</a>" + "</td>" +
+                "</tr>";
+            SetData.append(Data);
+            $("#LoadingStatus").html(" ");
+
+        }
+
+    }
+
+
+    //Yeni İlan Ekle
+
+    function AddNewAdvert(Id) {
+        $("#form")[0].reset();
+        $("#Id").val(0);
+        $("#CategoryId option:selected").text("-Kategori Seçiniz-");
+        $("#Country_Id option:selected").text("-İl Seçiniz-");
+        $("#State_Id option:selected").text("-İlçe Seçiniz-");
+        $("#ModalTitle").html("Yeni İlan Ekle");
+        $("#MyModal").modal();
+
+    }
+
+    //İlanı GÜncelle
+
+    function EditAdvertRecord(Id) {
+        var url = "/Home/GetAdvertById?Id=" + Id;
+        $("#ModalTitle").html("İlanı Güncelle");
+        $("#MyModal").modal();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#Id").val(obj.Id);
+                $("#Title").val(obj.AdvertOwner);
+                $("#AdvertOwner").val(obj.Title);
+                $("#Description").val(obj.Description);
+                $("#Price").val(obj.Price);
+                $("#CategoryId option:selected").text(obj.Category.CategoryName);
+                $("#CategoryId option:selected").val(obj.CategoryId);
+                $("#Country_Id option:selected").text(obj.Country.CountryName);
+                $("#Country_Id option:selected").val(obj.Country_Id);
+                $("#State_Id option:selected").text(obj.State.StateName);
+                $("#State_Id option:selected").val(obj.State_Id);
+                $("#Date").text(obj.Date);                                    
+                $("#HomeDetID").val(obj.HomeDetID);
+                $("#RoomCount").val(obj.HomeDetails.RoomCount);
+                $("#Age").val(obj.HomeDetails.Age);
+                $("#Floor").val(obj.HomeDetails.Floor);
+                $("#Balcony").val(obj.HomeDetails.Balcony);
+                $("#HeatingSystem").val(obj.HomeDetails.HeatingSystem);
+                $("#WorkDetID").val(obj.WorkDetID);
+                $("#Type").val(obj.WorkDetails.Type);
+                $("#Status").val(obj.WorkDetails.Status);
+                $("#WorkAge").val(obj.WorkDetails.WorkAge);
+                $("#WorkRoom").val(obj.WorkDetails.WorkRoom);
+                $("#CarDetID").val(obj.CarDetID);
+                $("#Brand").val(obj.CarDetails.Brand);
+                $("#CarModel").val(obj.CarDetails.Model);
+                $("#ModelYear").val(obj.CarDetails.ModelYear);
+                $("#Gear").val(obj.CarDetails.Gear);
+                $("#FuelType").val(obj.CarDetails.FuelType);
+                $("#Color").val(obj.CarDetails.Color);
+            }
+        })
+    }
+
+    //Kaydet
+    $("#SaveAdvertRecord").click(function () {
+        var data = $("#SubmitForm").serialize();
+        $.ajax({
+            type: "Post",
+            url: "/Home/SaveDataInDatabase",
+            data: data,
+            success: function (result) {
+                alert("Kayıt işlemi başarıyla tamamlandı.");
+                window.location.href = "/Home/index";
+                $("#MyModal").modal("hide");
+
+            }
+        })
+    })
+
+    //İlanı Sil
+    var DeleteAdvertRecord = function (Id) {
+        $("#Id").val(Id);
+        $("#DeleteConfirmation").modal("show");
+    }
+    var ConfirmDelete = function () {
+        var Id = $("#Id").val();
+        $.ajax({
+            type: "POST",
+            url: "/Home/DeleteAdvertRecord?Id=" + Id,
+            success: function (result) {
+                alert("Silme işlemi başarıyla tamamlandı.");
+                $("#DeleteConfirmation").modal("hide");
+                $(".row_" + Id).remove();
+            }
+        })
+    }
+</script>

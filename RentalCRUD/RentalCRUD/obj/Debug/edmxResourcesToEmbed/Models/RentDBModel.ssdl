@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RentalDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Advert">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" />
+    <Property Name="AdvertOwner" Type="nvarchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+    <Property Name="Price" Type="decimal" Precision="12" Scale="2" />
+    <Property Name="CategoryId" Type="int" />
+    <Property Name="Country_Id" Type="int" />
+    <Property Name="State_Id" Type="int" />
+    <Property Name="Date" Type="date" />
+    <Property Name="CarDetID" Type="int" />
+    <Property Name="HomeDetID" Type="int" />
+    <Property Name="WorkDetID" Type="int" />
+  </EntityType>
+  <EntityType Name="CarDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Brand" Type="nvarchar" MaxLength="50" />
+    <Property Name="Model" Type="nvarchar" MaxLength="50" />
+    <Property Name="Gear" Type="nvarchar" MaxLength="50" />
+    <Property Name="ModelYear" Type="int" />
+    <Property Name="FuelType" Type="nvarchar" MaxLength="50" />
+    <Property Name="Color" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="HomeDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoomCount" Type="int" />
+    <Property Name="Age" Type="int" />
+    <Property Name="Floor" Type="int" />
+    <Property Name="Balcony" Type="int" />
+    <Property Name="HeatingSystem" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="State">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CountryId" Type="int" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="WorkDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="nvarchar" MaxLength="50" />
+    <Property Name="WorkAge" Type="nvarchar" MaxLength="50" />
+    <Property Name="WorkRoom" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Advert_CarDetails">
+    <End Role="CarDetails" Type="Self.CarDetails" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Advert" Type="Self.Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CarDetails">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="CarDetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_Category">
+    <End Role="Category" Type="Self.Category" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Advert" Type="Self.Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_Country">
+    <End Role="Country" Type="Self.Country" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Advert" Type="Self.Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="Country_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_HomeDetails">
+    <End Role="HomeDetails" Type="Self.HomeDetails" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Advert" Type="Self.Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HomeDetails">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="HomeDetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_State">
+    <End Role="State" Type="Self.State" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Advert" Type="Self.Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="State">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="State_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_WorkDetails">
+    <End Role="WorkDetails" Type="Self.WorkDetails" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Advert" Type="Self.Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="WorkDetails">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="WorkDetID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_State_Country">
+    <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+    <End Role="State" Type="Self.State" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="State">
+        <PropertyRef Name="CountryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="RentalDBModelStoreContainer">
+    <EntitySet Name="Advert" EntityType="Self.Advert" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CarDetails" EntityType="Self.CarDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HomeDetails" EntityType="Self.HomeDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WorkDetails" EntityType="Self.WorkDetails" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Advert_CarDetails" Association="Self.FK_Advert_CarDetails">
+      <End Role="CarDetails" EntitySet="CarDetails" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_Category" Association="Self.FK_Advert_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_Country" Association="Self.FK_Advert_Country">
+      <End Role="Country" EntitySet="Country" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_HomeDetails" Association="Self.FK_Advert_HomeDetails">
+      <End Role="HomeDetails" EntitySet="HomeDetails" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_State" Association="Self.FK_Advert_State">
+      <End Role="State" EntitySet="State" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_WorkDetails" Association="Self.FK_Advert_WorkDetails">
+      <End Role="WorkDetails" EntitySet="WorkDetails" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_State_Country" Association="Self.FK_State_Country">
+      <End Role="Country" EntitySet="Country" />
+      <End Role="State" EntitySet="State" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

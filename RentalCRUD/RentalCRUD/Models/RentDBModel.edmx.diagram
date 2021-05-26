@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c829159fcb694e3499b8ccfb95b42012" Name="Diagram1">
+        <EntityTypeShape EntityType="RentalDBModel.Advert" Width="1.5" PointX="5.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentalDBModel.CarDetails" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentalDBModel.Category" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentalDBModel.Country" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentalDBModel.HomeDetails" Width="1.5" PointX="3" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentalDBModel.State" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentalDBModel.sysdiagrams" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RentalDBModel.WorkDetails" Width="1.5" PointX="3" PointY="15.75" IsExpanded="true" />
+        <AssociationConnector Association="RentalDBModel.FK_Advert_CarDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="RentalDBModel.FK_Advert_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="RentalDBModel.FK_Advert_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="RentalDBModel.FK_Advert_HomeDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="RentalDBModel.FK_Advert_State" ManuallyRouted="false" />
+        <AssociationConnector Association="RentalDBModel.FK_Advert_WorkDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="RentalDBModel.FK_State_Country" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

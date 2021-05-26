@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MvcCRUDDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="MvcCRUDDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AdDetails" EntityType="MvcCRUDDBModel.AdDetails" />
+    <EntitySet Name="Advert" EntityType="MvcCRUDDBModel.Advert" />
+    <EntitySet Name="Category" EntityType="MvcCRUDDBModel.Category" />
+    <EntitySet Name="Country" EntityType="MvcCRUDDBModel.Country" />
+    <EntitySet Name="State" EntityType="MvcCRUDDBModel.State" />
+    <EntitySet Name="sysdiagrams" EntityType="MvcCRUDDBModel.sysdiagrams" />
+    <AssociationSet Name="FK_Advert_AdDetails" Association="MvcCRUDDBModel.FK_Advert_AdDetails">
+      <End Role="AdDetails" EntitySet="AdDetails" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_Category" Association="MvcCRUDDBModel.FK_Advert_Category">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_Country" Association="MvcCRUDDBModel.FK_Advert_Country">
+      <End Role="Country" EntitySet="Country" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Advert_State" Association="MvcCRUDDBModel.FK_Advert_State">
+      <End Role="State" EntitySet="State" />
+      <End Role="Advert" EntitySet="Advert" />
+    </AssociationSet>
+    <AssociationSet Name="FK_State_Country" Association="MvcCRUDDBModel.FK_State_Country">
+      <End Role="Country" EntitySet="Country" />
+      <End Role="State" EntitySet="State" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="AdDetails">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Model" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Gear" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ModelYear" Type="Int32" />
+    <Property Name="Color" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FuelType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RoomCount" Type="Int32" />
+    <Property Name="Age" Type="Int32" />
+    <Property Name="Floor" Type="Int32" />
+    <NavigationProperty Name="Advert" Relationship="MvcCRUDDBModel.FK_Advert_AdDetails" FromRole="AdDetails" ToRole="Advert" />
+  </EntityType>
+  <EntityType Name="Advert">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Decimal" Precision="12" Scale="2" />
+    <Property Name="Country_Id" Type="Int32" />
+    <Property Name="State_Id" Type="Int32" />
+    <Property Name="CategoryId" Type="Int32" />
+    <Property Name="Date" Type="DateTime" Precision="0" />
+    <Property Name="DetailsId" Type="Int32" />
+    <NavigationProperty Name="AdDetails" Relationship="MvcCRUDDBModel.FK_Advert_AdDetails" FromRole="Advert" ToRole="AdDetails" />
+    <NavigationProperty Name="Category" Relationship="MvcCRUDDBModel.FK_Advert_Category" FromRole="Advert" ToRole="Category" />
+    <NavigationProperty Name="Country" Relationship="MvcCRUDDBModel.FK_Advert_Country" FromRole="Advert" ToRole="Country" />
+    <NavigationProperty Name="State" Relationship="MvcCRUDDBModel.FK_Advert_State" FromRole="Advert" ToRole="State" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Advert" Relationship="MvcCRUDDBModel.FK_Advert_Category" FromRole="Category" ToRole="Advert" />
+  </EntityType>
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Advert" Relationship="MvcCRUDDBModel.FK_Advert_Country" FromRole="Country" ToRole="Advert" />
+    <NavigationProperty Name="State" Relationship="MvcCRUDDBModel.FK_State_Country" FromRole="Country" ToRole="State" />
+  </EntityType>
+  <EntityType Name="State">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CountryId" Type="Int32" />
+    <NavigationProperty Name="Advert" Relationship="MvcCRUDDBModel.FK_Advert_State" FromRole="State" ToRole="Advert" />
+    <NavigationProperty Name="Country" Relationship="MvcCRUDDBModel.FK_State_Country" FromRole="State" ToRole="Country" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Advert_AdDetails">
+    <End Type="MvcCRUDDBModel.AdDetails" Role="AdDetails" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MvcCRUDDBModel.Advert" Role="Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AdDetails">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="DetailsId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_Category">
+    <End Type="MvcCRUDDBModel.Category" Role="Category" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MvcCRUDDBModel.Advert" Role="Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_Country">
+    <End Type="MvcCRUDDBModel.Country" Role="Country" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MvcCRUDDBModel.Advert" Role="Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="Country_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Advert_State">
+    <End Type="MvcCRUDDBModel.State" Role="State" Multiplicity="0..1" />
+    <End Type="MvcCRUDDBModel.Advert" Role="Advert" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="State">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Advert">
+        <PropertyRef Name="State_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_State_Country">
+    <End Type="MvcCRUDDBModel.Country" Role="Country" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MvcCRUDDBModel.State" Role="State" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="State">
+        <PropertyRef Name="CountryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
